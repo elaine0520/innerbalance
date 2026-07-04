@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InnerBalance - 内在平衡</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #F5F1ED;
+            color: #2C3E50;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .step {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .step.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            font-size: 32px;
+            color: #5B7B8C;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7F8C8D;
+            margin-bottom: 40px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: #5B7B8C;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        .btn:hover { background: #4A6A7B; transform: translateY(-2px); }
+        .question-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .question-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #2C3E50;
+        }
+        .option {
+            display: block;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            background: #F8F9FA;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover { background: #E8F4F8; border-color: #5B7B8C; }
+        .option.selected {
+            background: #5B7B8C;
+            color: white;
+            border-color: #5B7B8C;
+        }
+        .progress-bar {
+            height: 4px;
+            background: #E0E0E0;
+            border-radius: 2px;
+            margin-bottom: 30px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #5B7B8C;
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+        .result-section {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .result-section h3 {
+            color: #5B7B8C;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #E8F4F8;
+            color: #5B7B8C;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .advice-box {
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+        .advice-short { background: #FFF3E0; border-left: 4px solid #FF9800; }
+        .advice-medium { background: #E8F5E9; border-left: 4px solid #4CAF50; }
+        .advice-long { background: #E3F2FD; border-left: 4px solid #2196F3; }
+        select {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            background: white;
+            margin-bottom: 20px;
+        }
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .problem-card {
+            padding: 20px;
+            background: white;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .problem-card:hover { border-color: #5B7B8C; background: #F8F9FA; }
+        .problem-card.selected {
+            border-color: #5B7B8C;
+            background: #E8F4F8;
+        }
+        .problem-icon { font-size: 32px; margin-bottom: 8px; }
+        textarea {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Step 1: 欢迎页 -->
+        <div class="step active" id="step1">
+            <h1>🌿 InnerBalance</h1>
+            <p class="subtitle">理解你的社交模式，找到人际关系的内在平衡</p>
+            <div style="text-align: center; margin: 40px 0;">
+                <p style="color: #7F8C8D; margin-bottom: 20px;">
+                    基于 MBTI + 荣格八维理论<br>
+                    帮你把模糊的人际焦虑 → 转化为结构化决策
+                </p>
+            </div>
+            <button class="btn" onclick="nextStep(2)">开始探索 →</button>
+        </div>
+
+        <!-- Step 2: MBTI选择 -->
+        <div class="step" id="step2">
+            <div class="progress-bar"><div class="progress-fill" style="width: 20%"></div></div>
+            <h1>你的 MBTI 类型</h1>
+            <p class="subtitle">选择最符合你的类型（如果不确定，选最接近的）</p>
+            
+            <select id="mbti-select">
+                <option value="">请选择...</option>
+                <option value="INTJ">INTJ - 建筑师</option>
+                <option value="INTP">INTP - 逻辑学家</option>
+                <option value="ENTJ">ENTJ - 指挥官</option>
+                <option value="ENTP">ENTP - 辩论家</option>
+                <option value="INFJ">INFJ - 提倡者</option>
+                <option value="INFP">INFP - 调停者</option>
+                <option value="ENFJ">ENFJ - 主人公</option>
+                <option value="ENFP">ENFP - 竞选者</option>
+                <option value="ISTJ">ISTJ - 检查者</option>
+                <option value="ISFJ">ISFJ - 保护者</option>
+                <option value="ESTJ">ESTJ - 总经理</option>
+                <option value="ESFJ">ESFJ - 执政官</option>
+                <option value="ISTP">ISTP - 鉴赏家</option>
+                <option value="ISFP">ISFP - 探险家</option>
+                <option value="ESTP">ESTP - 企业家</option>
+                <option value="ESFP">ESFP - 表演者</option>
+            </select>
+            
+            <button class="btn" onclick="if(document.getElementById('mbti-select').value) nextStep(3); else alert('请先选择MBTI类型');">下一步</button>
+        </div>
+
+        <!-- Step 3: 问卷（5题） -->
+        <div class="step" id="step3">
+            <div class="progress-bar"><div class="progress-fill" id="progress3" style="width: 40%"></div></div>
+            <h1>社交模式测评</h1>
+            <p class="subtitle">第 <span id="q-current">1</span> / 5 题</p>
+            
+            <div id="question-container"></div>
+        </div>
+
+        <!-- Step 4: 困境选择 -->
+        <div class="step" id="step4">
+            <div class="progress-bar"><div class="progress-fill" style="width: 80%"></div></div>
+            <h1>当前人际困境</h1>
+            <p class="subtitle">选择最贴近你现状的类型</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card" onclick="selectProblem(this, 'roommate')">
+                    <div class="problem-icon">🏠</div>
+                    <div>室友/宿舍关系</div>
+                </div>
+                <div class="problem-card" onclick="selectProblem(this, 'ignored')">
+                    <div class="problem-icon">💔</div>
+                    <div>被忽视/冷落</div>
+                </div>
+                <div class="problem-card" onclick="selectProblem(this, 'express')">
+                    <div class="problem-icon">🤐</div>
+                    <div>不敢表达真实想法</div>
+                </div>
+                <div class="problem-card" onclick="selectProblem(this, 'drain')">
+                    <div class="problem-icon">🔋</div>
+                    <div>社交后疲惫/内耗</div>
+                </div>
+                <div class="problem-card" onclick="selectProblem(this, 'end')">
+                    <div class="problem-icon">✂️</div>
+                    <div>犹豫是否结束关系</div>
+                </div>
+                <div class="problem-card" onclick="selectProblem(this, 'misunderstood')">
+                    <div class="problem-icon">😶</div>
+                    <div>被误解但不想解释</div>
+                </div>
+            </div>
+            
+            <p style="margin-bottom: 10px; color: #7F8C8D;">补充描述（可选，50字以内）：</p>
+            <textarea id="problem-desc" placeholder="简单描述一下具体情况..."></textarea>
+            
+            <button class="btn" onclick="generateReport()">生成分析报告</button>
+        </div>
+
+        <!-- Step 5: 报告页 -->
+        <div class="step" id="step5">
+            <h1>📊 你的分析报告</h1>
+            <p class="subtitle" id="report-subtitle">基于你的 MBTI 和社交模式</p>
+            
+            <div id="report-content"></div>
+            
+            <button class="btn" onclick="location.reload()">重新测试 ↺</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                title: "和别人相处后，你通常的感受是？",
+                options: [
+                    { value: 'A', text: "精力提升，越聊越有能量" },
+                    { value: 'B', text: "有点累，但可以接受" },
+                    { value: 'C', text: "明显疲惫，需要独处恢复" },
+                    { value: 'D', text: "强烈消耗，想避免社交" }
+                ]
+            },
+            {
+                id: 2,
+                title: "当你和别人发生矛盾时，你通常？",
+                options: [
+                    { value: 'A', text: "直接沟通解决" },
+                    { value: 'B', text: "观察情况再沟通" },
+                    { value: 'C', text: "自我消化，不主动提" },
+                    { value: 'D', text: "慢慢疏远关系" }
+                ]
+            },
+            {
+                id: 3,
+                title: "在人际关系中，你最看重什么？",
+                options: [
+                    { value: 'A', text: "彼此理解、被看见（Fi）" },
+                    { value: 'B', text: "氛围和谐、大家舒服（Fe）" },
+                    { value: 'C', text: "目标达成、效率优先（Te）" },
+                    { value: 'D', text: "逻辑一致、道理清楚（Ti）" }
+                ]
+            },
+            {
+                id: 4,
+                title: "被误解时，你的第一反应是？",
+                options: [
+                    { value: 'A', text: "立即解释澄清" },
+                    { value: 'B', text: "视情况决定是否解释" },
+                    { value: 'C', text: "不解释，清者自清" },
+                    { value: 'D', text: "情绪先受影响，再处理" }
+                ]
+            },
+            {
+                id: 5,
+                title: "长期压力下，你对关系的态度？",
+                options: [
+                    { value: 'A', text: "主动修复关系" },
+                    { value: 'B', text: "减少联系，保持距离" },
+                    { value: 'C', text: "表面正常，内心消耗" },
+                    { value: 'D', text: "直接退出关系" }
+                ]
+            }
+        ];
+
+        const theoryDB = {
+            "INFJ": {
+                name: "提倡者",
+                dominant: "Ni（内倾直觉）",
+                auxiliary: "Fe（外倾情感）",
+                tertiary: "Ti（内倾思考）",
+                inferior: "Se（外倾感觉）",
+                desc: "Ni主导让你容易过度预判关系走向，Fe辅助让你优先满足他人而压抑自身需求。"
+            },
+            "INFP": {
+                name: "调停者",
+                dominant: "Fi（内倾情感）",
+                auxiliary: "Ne（外倾直觉）",
+                tertiary: "Si（内倾感觉）",
+                inferior: "Te（外倾思考）",
+                desc: "Fi主导让你极度重视 authenticity，Ne让你看到关系中无限可能性，但也容易理想化。"
+            },
+            "INTJ": {
+                name: "建筑师",
+                dominant: "Ni（内倾直觉）",
+                auxiliary: "Te（外倾思考）",
+                tertiary: "Fi（内倾情感）",
+                inferior: "Se（外倾感觉）",
+                desc: "Te辅助让你习惯用效率思维处理关系，但Fi tertiary的情感需求常被忽视。"
+            },
+            "INTP": {
+                name: "逻辑学家",
+                dominant: "Ti（内倾思考）",
+                auxiliary: "Ne（外倾直觉）",
+                tertiary: "Si（内倾感觉）",
+                inferior: "Fe（外倾情感）",
+                desc: "Fe inferior让你在人际关系中感到笨拙，但Ti让你能深度分析关系逻辑。"
+            },
+            "ENFJ": {
+                name: "主人公",
+                dominant: "Fe（外倾情感）",
+                auxiliary: "Ni（内倾直觉）",
+                tertiary: "Se（外倾感觉）",
+                inferior: "Ti（内倾思考）",
+                desc: "Fe主导让你天然擅长营造和谐，但容易过度承担他人情绪责任。"
+            },
+            "ENFP": {
+                name: "竞选者",
+                dominant: "Ne（外倾直觉）",
+                auxiliary: "Fi（内倾情感）",
+                tertiary: "Te（外倾思考）",
+                inferior: "Si（内倾感觉）",
+                desc: "Ne-Fi让你充满热情与真诚，但Si inferior让你容易忽视关系中的现实细节。"
+            },
+            "ENTJ": {
+                name: "指挥官",
+                dominant: "Te（外倾思考）",
+                auxiliary: "Ni（内倾直觉）",
+                tertiary: "Se（外倾感觉）",
+                inferior: "Fi（内倾情感）",
+                desc: "Te主导让你直接高效，但Fi inferior的情感脆弱面常被隐藏。"
+            },
+            "ENTP": {
+                name: "辩论家",
+                dominant: "Ne（外倾直觉）",
+                auxiliary: "Ti（内倾思考）",
+                tertiary: "Fe（外倾情感）",
+                inferior: "Si（内倾感觉）",
+                desc: "Ne-Ti让你享受智力交锋，但Fe tertiary让你也渴望被喜欢，形成矛盾。"
+            },
+            "ISTJ": {
+                name: "检查者",
+                dominant: "Si（内倾感觉）",
+                auxiliary: "Te（外倾思考）",
+                tertiary: "Fi（内倾情感）",
+                inferior: "Ne（外倾直觉）",
+                desc: "Si主导重视传统与稳定，Ne inferior让你对关系变化感到焦虑。"
+            },
+            "ISFJ": {
+                name: "保护者",
+                dominant: "Si（内倾感觉）",
+                auxiliary: "Fe（外倾情感）",
+                tertiary: "Ti（内倾思考）",
+                inferior: "Ne（外倾直觉）",
+                desc: "Si-Fe让你默默付出，但容易积累 resentment 而不表达。"
+            },
+            "ESTJ": {
+                name: "总经理",
+                dominant: "Te（外倾思考）",
+                auxiliary: "Si（内倾感觉）",
+                tertiary: "Ne（外倾直觉）",
+                inferior: "Fi（内倾情感）",
+                desc: "Te-Si让你重视责任与规则，但Fi inferior让你难以表达柔软面。"
+            },
+            "ESFJ": {
+                name: "执政官",
+                dominant: "Fe（外倾情感）",
+                auxiliary: "Si（内倾感觉）",
+                tertiary: "Ne（外倾直觉）",
+                inferior: "Ti（内倾思考）",
+                desc: "Fe-Si让你极度重视和谐与传统，Ti inferior让你在被质疑时感到混乱。"
+            },
+            "ISTP": {
+                name: "鉴赏家",
+                dominant: "Ti（内倾思考）",
+                auxiliary: "Se（外倾感觉）",
+                tertiary: "Ni（内倾直觉）",
+                inferior: "Fe（外倾情感）",
+                desc: "Ti-Se让你活在当下，Fe inferior让你在深度情感连接上感到困难。"
+            },
+            "ISFP": {
+                name: "探险家",
+                dominant: "Fi（内倾情感）",
+                auxiliary: "Se（外倾感觉）",
+                tertiary: "Ni（内倾直觉）",
+                inferior: "Te（外倾思考）",
+                desc: "Fi-Se让你追求真实体验，Te inferior让你在需要果断时犹豫。"
+            },
+            "ESTP": {
+                name: "企业家",
+                dominant: "Se（外倾感觉）",
+                auxiliary: "Ti（内倾思考）",
+                tertiary: "Fe（外倾情感）",
+                inferior: "Ni（内倾直觉）",
+                desc: "Se-Ti让你享受当下互动，Ni inferior让你忽视长期关系后果。"
+            },
+            "ESFP": {
+                name: "表演者",
+                dominant: "Se（外倾感觉）",
+                auxiliary: "Fi（内倾情感）",
+                tertiary: "Te（外倾思考）",
+                inferior: "Ni（内倾直觉）",
+                desc: "Se-Fi让你热情真诚，但Ni inferior让你对关系深层模式缺乏觉察。"
+            }
+        };
+
+        const problemDB = {
+            "roommate": {
+                name: "室友/宿舍关系",
+                type: "边界问题",
+                aspects: ["私人空间边界模糊", "生活习惯差异", "强制近距离社交"],
+                insight: "宿舍是'非自愿亲密关系'，你的社交能量被持续消耗却没有恢复空间。"
+            },
+            "ignored": {
+                name: "被忽视/冷落",
+                type: "期待不对等",
+                aspects: ["付出回报不平衡", "情感需求未被识别", "关系优先级差异"],
+                insight: "你可能在用Fe过度付出，期待对方用同样的方式回应，但对方可能根本 unaware。"
+            },
+            "express": {
+                name: "不敢表达真实想法",
+                type: "沟通缺失",
+                aspects: ["害怕冲突", "担心破坏关系", "自我价值感低"],
+                insight: "你的'不表达'可能已经被对方解读为'没意见'，形成恶性循环。"
+            },
+            "drain": {
+                name: "社交后疲惫/内耗",
+                type: "能量管理问题",
+                aspects: ["社交频率过高", "缺乏恢复时间", "过度分析互动"],
+                insight: "内耗往往来自事后的'反刍'，而非社交本身。你在脑中把对话重演了10遍。"
+            },
+            "end": {
+                name: "犹豫是否结束关系",
+                type: "决策困难",
+                aspects: ["沉没成本", "害怕孤独", "理想化过去"],
+                insight: "INFJ的'doorslam'是长期积累后的爆发，但之前的忍耐让你更痛苦。"
+            },
+            "misunderstood": {
+                name: "被误解但不想解释",
+                type: "认知差异",
+                aspects: ["解释成本过高", "认为对方应该懂", "保护自我边界"],
+                insight: "不解释是一种自我保护，但也可能让对方永远无法理解真实的你。"
+            }
+        };
+
+        let currentQuestion = 0;
+        let answers = {};
+        let selectedMBTI = '';
+        let selectedProblem = '';
+
+        function nextStep(stepNum) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + stepNum).classList.add('active');
+            
+            if (stepNum === 3) {
+                selectedMBTI = document.getElementById('mbti-select').value;
+                showQuestion(0);
+            }
+        }
+
+        function showQuestion(index) {
+            currentQuestion = index;
+            const q = questions[index];
+            const container = document.getElementById('question-container');
+            
+            let html = `<div class="question-card"><div class="question-title">${q.title}</div>`;
+            
+            q.options.forEach(opt => {
+                html += `<div class="option" onclick="selectOption('${opt.value}', this)">${opt.text}</div>`;
+            });
+            
+            html += '</div>';
+            
+            if (index < questions.length - 1) {
+                html += `<button class="btn" id="q-btn" onclick="nextQuestion()" disabled>下一题 →</button>`;
+            } else {
+                html += `<button class="btn" id="q-btn" onclick="finishQuestions()" disabled>完成问卷 →</button>`;
+            }
+            
+            container.innerHTML = html;
+            document.getElementById('q-current').textContent = index + 1;
+            document.getElementById('progress3').style.width = (40 + (index / 5) * 20) + '%';
+        }
+
+        function selectOption(value, element) {
+            answers[currentQuestion] = value;
+            document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('q-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            showQuestion(currentQuestion + 1);
+        }
+
+        function finishQuestions() {
+            nextStep(4);
+        }
+
+        function selectProblem(element, type) {
+            document.querySelectorAll('.problem-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedProblem = type;
+        }
+
+        function analyzePattern() {
+            let feScore = 0, fiScore = 0, tiScore = 0, teScore = 0;
+            let avoidScore = 0, sensitiveScore = 0;
+
+            if (answers[0] === 'C') sensitiveScore += 1;
+            if (answers[0] === 'D') { sensitiveScore += 2; avoidScore += 1; }
+
+            if (answers[1] === 'C') avoidScore += 2;
+            if (answers[1] === 'D') avoidScore += 3;
+            if (answers[1] === 'A') teScore += 1;
+
+            if (answers[2] === 'A') fiScore += 2;
+            if (answers[2] === 'B') feScore += 2;
+            if (answers[2] === 'C') teScore += 2;
+            if (answers[2] === 'D') tiScore += 2;
+
+            if (answers[3] === 'C') { avoidScore += 1; sensitiveScore += 1; }
+            if (answers[3] === 'D') sensitiveScore += 2;
+
+            if (answers[4] === 'C') { avoidScore += 2; sensitiveScore += 1; }
+            if (answers[4] === 'D') avoidScore += 3;
+            if (answers[4] === 'B') avoidScore += 1;
+
+            let pattern = "", patternDesc = "";
+            if (feScore >= 2 && avoidScore >= 2) {
+                pattern = "高Fe压抑型";
+                patternDesc = "你习惯优先照顾他人感受，但长期压抑自己的需求。表面和谐，内心积累 resentment。";
+            } else if (fiScore >= 2 && sensitiveScore >= 2) {
+                pattern = "高敏感反思型";
+                patternDesc = "你对关系中的细节极度敏感，事后反复分析。真诚但容易受伤，需要被深度理解。";
+            } else if (avoidScore >= 3) {
+                pattern = "回避冲突型";
+                patternDesc = "你把冲突视为关系破裂的信号，选择回避来维持表面和平。但问题从未真正解决。";
+            } else if (tiScore >= 2 && teScore >= 1) {
+                pattern = "理性分析型";
+                patternDesc = "你习惯用逻辑拆解关系，但可能忽视了情感层面的复杂性。道理懂了，心还没过去。";
+            } else if (teScore >= 2) {
+                pattern = "目标导向型";
+                patternDesc = "你把关系也视为需要'管理'的项目，效率高但可能让对方感到被工具化。";
+            } else {
+                pattern = "平衡适应型";
+                patternDesc = "你的社交模式相对灵活，能根据情境调整。这是优势，但也可能意味着缺乏稳定的核心策略。";
+            }
+
+            return { pattern, patternDesc, scores: { feScore, fiScore, tiScore, teScore, avoidScore, sensitiveScore } };
+        }
+
+        function generateAdvice(pattern, mbti, problem) {
+            const advice = { short: "", medium: "", long: "" };
+
+            if (pattern === "高Fe压抑型") {
+                advice.short = "今晚试着对一个人说'不'，哪怕是很小的事（比如'我不想吃这个'）";
+                advice.medium = "建立'情感记账本'：记录一周内你为他人做的 vs 为自己做的，看看比例";
+                advice.long = "发展Ti功能：做决定前，先问自己'如果完全抛开对方感受，我真正想要什么？'";
+            } else if (pattern === "回避冲突型") {
+                advice.short = "把一件你想回避的小事，用文字发出去（不用当面说，降低压力）";
+                advice.medium = "每周设定一次'微冲突练习'：主动表达一个不同意见，观察对方反应";
+                advice.long = "理解：冲突≠关系破裂。健康的冲突是关系的免疫系统，清除毒素才能更健康";
+            } else if (pattern === "高敏感反思型") {
+                advice.short = "设置'反刍时间限制'：只允许自己想10分钟，然后强制做一件具体的事";
+                advice.medium = "练习'直接确认'：当你猜测对方想法时，直接问'你刚才是不是...'，验证而非臆测";
+                advice.long = "发展Te功能：把对关系的分析转化为可执行的行动清单，而非停留在思考层";
+            } else if (pattern === "理性分析型") {
+                advice.short = "今天对一个人说'我感受...'而不是'我认为...'，练习情感表达";
+                advice.medium = "每周一次'无分析社交'：纯粹享受相处，不思考关系意义";
+                advice.long = "理解：关系不是逻辑题，没有标准答案。允许自己'不讲道理'地喜欢一个人";
+            } else {
+                advice.short = "观察一个你欣赏的人，记录TA处理类似情境的具体做法";
+                advice.medium = "选择一种模式（上述任意一种）进行两周的刻意练习";
+                advice.long = "建立稳定的核心策略：在灵活中找到自己的'不变量'";
+            }
+
+            if (problem === "roommate") {
+                advice.short += " | 和室友明确一个'勿扰时段'，哪怕只有1小时";
+            } else if (problem === "ignored") {
+                advice.short += " | 直接告诉对方'我需要你回应我'";
+            } else if (problem === "express") {
+                advice.short += " | 用'我观察到...我感到...我需要...'句式表达";
+            } else if (problem === "drain") {
+                advice.short += " | 社交后立即安排30分钟独处恢复时间";
+            } else if (problem === "end") {
+                advice.short += " | 列出这段关系的3个继续理由和3个结束理由";
+            } else if (problem === "misunderstood") {
+                advice.short += " | 选择一个人，解释一件你被误解的事，只解释一次";
+            }
+
+            return advice;
+        }
+
+        function generateReport() {
+            if (!selectedProblem) {
+                alert('请先选择一个人际困境');
+                return;
+            }
+
+            const patternData = analyzePattern();
+            const mbtiData = theoryDB[selectedMBTI] || theoryDB["INFJ"];
+            const problemData = problemDB[selectedProblem];
+            const advice = generateAdvice(patternData.pattern, selectedMBTI, selectedProblem);
+
+            let consistency = "";
+            const mbtiFirst = selectedMBTI[0];
+            if ((mbtiFirst === 'I' && (answers[0] === 'A' || answers[0] === 'B')) || 
+                (mbtiFirst === 'E' && (answers[0] === 'C' || answers[0] === 'D'))) {
+                consistency = "⚠️ 注意：你的行为表现与自报的MBTI类型在E/I维度上不一致。你可能处于'社交面具'状态，或需要重新确认类型。";
+            }
+
+            const reportHTML = `
+                <div class="result-section">
+                    <h3>🧩 人际模式分析</h3>
+                    <div style="margin-bottom: 12px;">
+                        <span class="tag">${selectedMBTI} - ${mbtiData.name}</span>
+                        <span class="tag">${patternData.pattern}</span>
+                    </div>
+                    <p>${patternData.patternDesc}</p>
+                    ${consistency ? `<p style="color: #E67E22; margin-top: 10px; font-size: 14px;">${consistency}</p>` : ''}
+                </div>
+
+                <div class="result-section">
+                    <h3>🔍 问题结构拆解</h3>
+                    <p><strong>困境类型：</strong>${problemData.type}</p>
+                    <p style="margin-top: 8px;"><strong>核心维度：</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 8px;">
+                        ${problemData.aspects.map(a => `<li>${a}</li>`).join('')}
+                    </ul>
+                    <p style="margin-top: 12px; color: #5B7B8C; font-style: italic;">💡 ${problemData.insight}</p>
+                </div>
+
+                <div class="result-section">
+                    <h3>🎯 行动建议</h3>
+                    <div class="advice-box advice-short">
+                        <strong>⚡ 短期（今天就能做）：</strong><br>
+                        ${advice.short}
+                    </div>
+                    <div class="advice-box advice-medium">
+                        <strong>🌱 中期（两周内）：</strong><br>
+                        ${advice.medium}
+                    </div>
+                    <div class="advice-box advice-long">
+                        <strong>🎯 长期（人格成长）：</strong><br>
+                        ${advice.long}
+                    </div>
+                </div>
+
+                <div class="result-section">
+                    <h3>📚 理论解释（荣格八维）</h3>
+                    <p><strong>主导功能：</strong>${mbtiData.dominant}</p>
+                    <p><strong>辅助功能：</strong>${mbtiData.auxiliary}</p>
+                    <p><strong>第三功能：</strong>${mbtiData.tertiary}</p>
+                    <p><strong>劣势功能：</strong>${mbtiData.inferior}</p>
+                    <p style="margin-top: 12px;">${mbtiData.desc}</p>
+                    <p style="margin-top: 12px; color: #7F8C8D; font-size: 14px;">
+                        你的${patternData.pattern.includes('Fe') ? 'Fe过强' : patternData.pattern.includes('回避') ? '回避模式' : '当前模式'} 
+                        正在消耗你的${mbtiData.inferior}功能的发展空间。
+                        成长方向：有意识地练习${mbtiData.inferior}相关的技能。
+                    </p>
+                </div>
+
+                <div class="result-section" style="text-align: center; background: #F8F9FA;">
+                    <p style="color: #7F8C8D; font-size: 14px;">
+                        💌 补充描述：${document.getElementById('problem-desc').value || '无'}<br><br>
+                        记住：这不是诊断，只是一面镜子。<br>
+                        真正的改变，从一个小行动开始。
+                    </p>
+                </div>
+            `;
+
+            document.getElementById('report-content').innerHTML = reportHTML;
+            document.getElementById('report-subtitle').textContent = `${selectedMBTI} · ${patternData.pattern} · ${problemData.name}`;
+            nextStep(5);
+        }
+    </script>
+</body>
+</html>
