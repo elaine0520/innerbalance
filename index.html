@@ -208,11 +208,11 @@
             <button class="btn" onclick="if(document.getElementById('mbti-select').value) nextStep(3); else alert('请先选择MBTI类型');">下一步</button>
         </div>
 
-        <!-- Step 3: 问卷（5题） -->
+        <!-- Step 3: 问卷（8题） -->
         <div class="step" id="step3">
             <div class="progress-bar"><div class="progress-fill" id="progress3" style="width: 40%"></div></div>
             <h1>社交模式测评</h1>
-            <p class="subtitle">第 <span id="q-current">1</span> / 5 题</p>
+            <p class="subtitle">第 <span id="q-current">1</span> / 8 题</p>
             
             <div id="question-container"></div>
         </div>
@@ -271,52 +271,82 @@
         const questions = [
             {
                 id: 1,
-                title: "和别人相处后，你通常的感受是？",
+                title: "和别人相处后，你通常更接近哪种状态？",
                 options: [
-                    { value: 'A', text: "精力提升，越聊越有能量" },
-                    { value: 'B', text: "有点累，但可以接受" },
-                    { value: 'C', text: "明显疲惫，需要独处恢复" },
-                    { value: 'D', text: "强烈消耗，想避免社交" }
+                    { value: 'A', text: "越聊越兴奋，想继续社交" },
+                    { value: 'B', text: "可以继续，但需要短暂独处" },
+                    { value: 'C', text: "明显疲惫，需要恢复时间" },
+                    { value: 'D', text: "强烈消耗，会尽量避免社交" }
                 ]
             },
             {
                 id: 2,
-                title: "当你和别人发生矛盾时，你通常？",
+                title: "当你和别人产生矛盾时，你最常见的反应是？",
                 options: [
-                    { value: 'A', text: "直接沟通解决" },
-                    { value: 'B', text: "观察情况再沟通" },
-                    { value: 'C', text: "自我消化，不主动提" },
-                    { value: 'D', text: "慢慢疏远关系" }
+                    { value: 'A', text: "直接说清楚，快速解决问题" },
+                    { value: 'B', text: "先观察对方态度再决定是否沟通" },
+                    { value: 'C', text: "不主动说，自己慢慢消化" },
+                    { value: 'D', text: "表面维持关系，内心逐渐疏远" }
                 ]
             },
             {
                 id: 3,
-                title: "在人际关系中，你最看重什么？",
+                title: "当你有不满或需求时，你更倾向于：",
                 options: [
-                    { value: 'A', text: "彼此理解、被看见（Fi）" },
-                    { value: 'B', text: "氛围和谐、大家舒服（Fe）" },
-                    { value: 'C', text: "目标达成、效率优先（Te）" },
-                    { value: 'D', text: "逻辑一致、道理清楚（Ti）" }
+                    { value: 'A', text: "直接表达出来" },
+                    { value: 'B', text: "选择性表达（看人/看情况）" },
+                    { value: 'C', text: "很少表达，怕影响关系" },
+                    { value: 'D', text: "几乎不会表达，习惯自己调整" }
                 ]
             },
             {
                 id: 4,
-                title: "被误解时，你的第一反应是？",
+                title: "你判断一段关系是否重要的主要依据是：",
                 options: [
-                    { value: 'A', text: "立即解释澄清" },
-                    { value: 'B', text: "视情况决定是否解释" },
-                    { value: 'C', text: "不解释，清者自清" },
-                    { value: 'D', text: "情绪先受影响，再处理" }
+                    { value: 'A', text: "是否讲道理、逻辑是否清晰（Ti）" },
+                    { value: 'B', text: "是否稳定可靠、长期一致（Si）" },
+                    { value: 'C', text: "是否情绪舒服、相处自在（Fe）" },
+                    { value: 'D', text: "是否被理解、被真正看见（Fi）" }
                 ]
             },
             {
                 id: 5,
-                title: "长期压力下，你对关系的态度？",
+                title: "被误解时你通常：",
                 options: [
-                    { value: 'A', text: "主动修复关系" },
+                    { value: 'A', text: "立即解释清楚" },
+                    { value: 'B', text: "视情况解释" },
+                    { value: 'C', text: "不解释，觉得没必要" },
+                    { value: 'D', text: "情绪波动较大，但不会说出来" }
+                ]
+            },
+            {
+                id: 6,
+                title: "在人际关系中你更常是：",
+                options: [
+                    { value: 'A', text: "主动维系关系的人" },
+                    { value: 'B', text: "双方互动比较均衡" },
+                    { value: 'C', text: "被动回应别人联系" },
+                    { value: 'D', text: "很少主动联系别人" }
+                ]
+            },
+            {
+                id: 7,
+                title: "当你在人际关系压力很大时：",
+                options: [
+                    { value: 'A', text: "主动沟通解决问题" },
                     { value: 'B', text: "减少联系，保持距离" },
                     { value: 'C', text: "表面正常，内心消耗" },
-                    { value: 'D', text: "直接退出关系" }
+                    { value: 'D', text: "彻底回避社交" }
+                ]
+            },
+            {
+                id: 8,
+                title: "你做人际决定时更依赖：",
+                options: [
+                    { value: 'A', text: "逻辑分析（Ti）" },
+                    { value: 'B', text: "经验与稳定性（Si）" },
+                    { value: 'C', text: "当下感受（Se/Fe）" },
+                    { value: 'D', text: "直觉判断（感觉对不对）（Ni）" }
                 ]
             }
         ];
@@ -527,7 +557,7 @@
             
             container.innerHTML = html;
             document.getElementById('q-current').textContent = index + 1;
-            document.getElementById('progress3').style.width = (40 + (index / 5) * 20) + '%';
+            document.getElementById('progress3').style.width = (40 + (index / 8) * 20) + '%';
         }
 
         function selectOption(value, element) {
@@ -552,50 +582,95 @@
         }
 
         function analyzePattern() {
-            let feScore = 0, fiScore = 0, tiScore = 0, teScore = 0;
-            let avoidScore = 0, sensitiveScore = 0;
+            let eScore = 0, iScore = 0;
+            let directComm = 0, observeAdapt = 0, internalize = 0, avoidDetach = 0;
+            let feOrient = 0, fiOrient = 0, tiOrient = 0, niOrient = 0, siOrient = 0, seOrient = 0;
+            let teOrient = 0;
 
-            if (answers[0] === 'C') sensitiveScore += 1;
-            if (answers[0] === 'D') { sensitiveScore += 2; avoidScore += 1; }
+            if (answers[0] === 'A') { eScore += 3; iScore -= 3; }
+            else if (answers[0] === 'B') { eScore += 1; iScore -= 1; }
+            else if (answers[0] === 'C') { eScore -= 2; iScore += 2; }
+            else if (answers[0] === 'D') { eScore -= 3; iScore += 3; }
 
-            if (answers[1] === 'C') avoidScore += 2;
-            if (answers[1] === 'D') avoidScore += 3;
-            if (answers[1] === 'A') teScore += 1;
+            if (answers[1] === 'A') { directComm += 1; teOrient += 1; }
+            else if (answers[1] === 'B') { observeAdapt += 1; niOrient += 1; }
+            else if (answers[1] === 'C') { internalize += 1; }
+            else if (answers[1] === 'D') { avoidDetach += 1; feOrient += 1; }
 
-            if (answers[2] === 'A') fiScore += 2;
-            if (answers[2] === 'B') feScore += 2;
-            if (answers[2] === 'C') teScore += 2;
-            if (answers[2] === 'D') tiScore += 2;
+            if (answers[2] === 'A') { directComm += 1; teOrient += 1; }
+            else if (answers[2] === 'B') { observeAdapt += 1; feOrient += 1; }
+            else if (answers[2] === 'C') { internalize += 1; feOrient += 1; }
+            else if (answers[2] === 'D') { avoidDetach += 1; fiOrient += 1; }
 
-            if (answers[3] === 'C') { avoidScore += 1; sensitiveScore += 1; }
-            if (answers[3] === 'D') sensitiveScore += 2;
+            if (answers[3] === 'A') { tiOrient += 2; }
+            else if (answers[3] === 'B') { siOrient += 2; }
+            else if (answers[3] === 'C') { feOrient += 2; }
+            else if (answers[3] === 'D') { fiOrient += 2; }
 
-            if (answers[4] === 'C') { avoidScore += 2; sensitiveScore += 1; }
-            if (answers[4] === 'D') avoidScore += 3;
-            if (answers[4] === 'B') avoidScore += 1;
+            if (answers[4] === 'A') { directComm += 1; }
+            else if (answers[4] === 'B') { observeAdapt += 1; }
+            else if (answers[4] === 'C') { avoidDetach += 1; }
+            else if (answers[4] === 'D') { internalize += 1; fiOrient += 1; }
+
+            if (answers[5] === 'A') { feOrient += 1; directComm += 1; }
+            else if (answers[5] === 'B') { observeAdapt += 1; }
+            else if (answers[5] === 'C') { avoidDetach += 1; }
+            else if (answers[5] === 'D') { avoidDetach += 2; iScore += 1; }
+
+            if (answers[6] === 'A') { directComm += 1; }
+            else if (answers[6] === 'B') { avoidDetach += 1; }
+            else if (answers[6] === 'C') { internalize += 2; feOrient += 1; }
+            else if (answers[6] === 'D') { avoidDetach += 2; }
+
+            if (answers[7] === 'A') { tiOrient += 2; teOrient += 1; }
+            else if (answers[7] === 'B') { siOrient += 2; }
+            else if (answers[7] === 'C') { seOrient += 1; feOrient += 1; }
+            else if (answers[7] === 'D') { niOrient += 2; }
 
             let pattern = "", patternDesc = "";
-            if (feScore >= 2 && avoidScore >= 2) {
+
+            if (feOrient >= 3 && internalize >= 3 && answers[6] === 'C') {
                 pattern = "高Fe压抑型";
-                patternDesc = "你习惯优先照顾他人感受，但长期压抑自己的需求。表面和谐，内心积累 resentment。";
-            } else if (fiScore >= 2 && sensitiveScore >= 2) {
+                patternDesc = "你习惯优先照顾他人感受，但长期压抑自己的需求。表面和谐，内心积累 resentment。增加Q6判断：你在关系中过度承担责任，难以表达真实需求。";
+            }
+            else if (fiOrient >= 3 && iScore >= 2 && answers[4] === 'D') {
                 pattern = "高敏感反思型";
-                patternDesc = "你对关系中的细节极度敏感，事后反复分析。真诚但容易受伤，需要被深度理解。";
-            } else if (avoidScore >= 3) {
+                patternDesc = "你对关系中的细节极度敏感，事后反复分析。真诚但容易受伤，需要被深度理解。增加Q8区分：你的决策依赖直觉或感受，容易陷入过度解读。";
+            }
+            else if (avoidDetach >= 4 && iScore >= 2) {
                 pattern = "回避冲突型";
-                patternDesc = "你把冲突视为关系破裂的信号，选择回避来维持表面和平。但问题从未真正解决。";
-            } else if (tiScore >= 2 && teScore >= 1) {
+                patternDesc = "你把冲突视为关系破裂的信号，选择回避来维持表面和平。但问题从未真正解决。增加Q6判断：你的疏离程度较高，需要主动建立安全的关系边界。";
+            }
+            else if (tiOrient >= 3 && directComm >= 2) {
                 pattern = "理性分析型";
-                patternDesc = "你习惯用逻辑拆解关系，但可能忽视了情感层面的复杂性。道理懂了，心还没过去。";
-            } else if (teScore >= 2) {
+                patternDesc = "你习惯用逻辑拆解关系，但可能忽视了情感层面的复杂性。道理懂了，心还没过去。增加Q8确认：你的逻辑偏好明显，但需要练习情感表达。";
+            }
+            else if (niOrient >= 3 && answers[1] === 'B' && answers[7] === 'D') {
+                pattern = "直觉预判型";
+                patternDesc = "你依赖直觉预判关系走向，容易在事情发生前就'预知'结果。这种能力是你的优势，但也可能让你过早放弃或过度担忧。需要区分直觉和焦虑。";
+            }
+            else if (answers[5] === 'D' && avoidDetach >= 3 && iScore >= 2) {
+                pattern = "被动疏离型";
+                patternDesc = "你很少主动维系关系，习惯等待别人联系。这种被动模式可能让你错过重要关系，或被误解为冷漠。需要识别哪些关系值得主动投入。";
+            }
+            else if (teOrient >= 3) {
                 pattern = "目标导向型";
-                patternDesc = "你把关系也视为需要'管理'的项目，效率高但可能让对方感到被工具化。";
-            } else {
+                patternDesc = "你把关系也视为需要'管理'的项目，效率高但可能让对方感到被工具化。增加Q8确认：你的目标导向明显，但需要关注过程中的情感连接。";
+            }
+            else {
                 pattern = "平衡适应型";
-                patternDesc = "你的社交模式相对灵活，能根据情境调整。这是优势，但也可能意味着缺乏稳定的核心策略。";
+                patternDesc = "你的社交模式相对灵活，能根据情境调整。这是优势，但也可能意味着缺乏稳定的核心策略。建议找到你的'不变量'。";
             }
 
-            return { pattern, patternDesc, scores: { feScore, fiScore, tiScore, teScore, avoidScore, sensitiveScore } };
+            return { 
+                pattern, 
+                patternDesc, 
+                scores: { 
+                    eScore, iScore, 
+                    directComm, observeAdapt, internalize, avoidDetach,
+                    feOrient, fiOrient, tiOrient, niOrient, siOrient, seOrient, teOrient 
+                } 
+            };
         }
 
         function generateAdvice(pattern, mbti, problem) {
@@ -605,18 +680,30 @@
                 advice.short = "今晚试着对一个人说'不'，哪怕是很小的事（比如'我不想吃这个'）";
                 advice.medium = "建立'情感记账本'：记录一周内你为他人做的 vs 为自己做的，看看比例";
                 advice.long = "发展Ti功能：做决定前，先问自己'如果完全抛开对方感受，我真正想要什么？'";
-            } else if (pattern === "回避冲突型") {
-                advice.short = "把一件你想回避的小事，用文字发出去（不用当面说，降低压力）";
-                advice.medium = "每周设定一次'微冲突练习'：主动表达一个不同意见，观察对方反应";
-                advice.long = "理解：冲突≠关系破裂。健康的冲突是关系的免疫系统，清除毒素才能更健康";
             } else if (pattern === "高敏感反思型") {
                 advice.short = "设置'反刍时间限制'：只允许自己想10分钟，然后强制做一件具体的事";
                 advice.medium = "练习'直接确认'：当你猜测对方想法时，直接问'你刚才是不是...'，验证而非臆测";
                 advice.long = "发展Te功能：把对关系的分析转化为可执行的行动清单，而非停留在思考层";
+            } else if (pattern === "回避冲突型") {
+                advice.short = "把一件你想回避的小事，用文字发出去（不用当面说，降低压力）";
+                advice.medium = "每周设定一次'微冲突练习'：主动表达一个不同意见，观察对方反应";
+                advice.long = "理解：冲突≠关系破裂。健康的冲突是关系的免疫系统，清除毒素才能更健康";
             } else if (pattern === "理性分析型") {
                 advice.short = "今天对一个人说'我感受...'而不是'我认为...'，练习情感表达";
                 advice.medium = "每周一次'无分析社交'：纯粹享受相处，不思考关系意义";
                 advice.long = "理解：关系不是逻辑题，没有标准答案。允许自己'不讲道理'地喜欢一个人";
+            } else if (pattern === "直觉预判型") {
+                advice.short = "写下你对一件事的预测，然后观察实际结果，对比差异";
+                advice.medium = "练习'暂停预判'：当直觉出现时，先问自己'这是事实还是我的担忧？'";
+                advice.long = "发展Se功能：关注当下的事实，而非未来的可能性。用具体行动替代想象";
+            } else if (pattern === "被动疏离型") {
+                advice.short = "今天主动给一个人发消息，不需要理由，只是问候";
+                advice.medium = "建立'关系维护清单'：列出5个重要的人，每月至少主动联系一次";
+                advice.long = "理解：被动不是冷漠，而是能量管理方式。找到适合你的主动方式（如文字而非当面）";
+            } else if (pattern === "目标导向型") {
+                advice.short = "今天和一个人聊天，不设定任何目标，只是闲聊";
+                advice.medium = "练习'过程导向'：关注聊天本身的乐趣，而非要达到什么结果";
+                advice.long = "理解：关系不是项目，不需要KPI。允许自己'浪费时间'在人际关系上";
             } else {
                 advice.short = "观察一个你欣赏的人，记录TA处理类似情境的具体做法";
                 advice.medium = "选择一种模式（上述任意一种）进行两周的刻意练习";
@@ -724,4 +811,4 @@
         }
     </script>
 </body>
-</html>  
+</html>
